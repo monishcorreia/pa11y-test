@@ -1,0 +1,31 @@
+name: Pa11y Test
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch as needed
+
+jobs:
+  pa11y-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Choose the appropriate Node.js version
+
+      - name: Install pa11y and pa11y-reporter-html
+        run: npm install pa11y pa11y-reporter-html
+
+      - name: Run pa11y Test
+        run: npx pa11y-ci https://pa11y.org/ --reporter=pa11y-reporter-html
+
+      - name: Archive HTML Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: pa11y-report
+          path: pa11y-report.html  # Adjust the path to the generated HTML report
